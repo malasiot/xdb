@@ -1,13 +1,12 @@
-#ifndef __SQLITE_QUERY_RESULT_HANDLE_HPP__
-#define __SQLITE_QUERY_RESULT_HANDLE_HPP__
+#ifndef XDB_SQLITE_QUERY_RESULT_HANDLE_HPP
+#define XDB_SQLITE_QUERY_RESULT_HANDLE_HPP
 
-#include <wspp/database/query_result_handle.hpp>
-#include <wspp/database/types.hpp>
+#include <xdb/query_result_handle.hpp>
+#include <xdb/types.hpp>
 
 #include "statement.hpp"
 
-namespace wspp {
-namespace db {
+namespace xdb {
 
 class SQLiteQueryResultHandle: public QueryResultHandle {
 public:
@@ -56,6 +55,6 @@ private:
 } ;
 
 }
-}
+
 
 #endif

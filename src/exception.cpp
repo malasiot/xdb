@@ -1,10 +1,10 @@
-#include <wspp/database/exception.hpp>
+#include <xdb/exception.hpp>
 
 using namespace std ;
 
-namespace wspp { namespace db {
+namespace xdb {
 
 Exception::Exception(const std::string &msg): std::runtime_error(msg) {}
 
-} // namespace db
-} // namespace wspp
+} // namespace xdb
+

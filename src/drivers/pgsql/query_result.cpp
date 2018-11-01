@@ -1,16 +1,13 @@
 #include "query_result.hpp"
 #include "exceptions.hpp"
 
-#include <wspp/database/types.hpp>
-
-#include <boost/format.hpp>
+#include <xdb/types.hpp>
 
 #include "string_conv.hpp"
 
 using namespace std ;
-namespace wspp {
-namespace db {
 
+namespace xdb {
 
 PGSQLQueryResultHandle::PGSQLQueryResultHandle(PGresult *res): result_(res, &PQclear) {
 
@@ -125,7 +122,7 @@ void PGSQLQueryResultHandle::read(int idx, Blob &blob) const {
     blob = Blob((const char *)blob_bytes, blob_size) ;
 }
 
-}
+
 }
 
 

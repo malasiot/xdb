@@ -1,11 +1,9 @@
-#include <wspp/database/statement.hpp>
-#include <wspp/database/connection.hpp>
-
-#include <boost/algorithm/string.hpp>
+#include <xdb/statement.hpp>
+#include <xdb/connection.hpp>
 
 using namespace std ;
 
-namespace wspp { namespace db {
+namespace xdb {
 
 Statement::Statement(Connection &con, const std::string & sql) {
     con.check() ;
@@ -13,9 +11,15 @@ Statement::Statement(Connection &con, const std::string & sql) {
 }
 
 std::string escapeName(const std::string &unescaped) {
-    string e = boost::algorithm::replace_all_copy(unescaped, "\"", "\"\"") ;
-    return '"' + e + '"' ;
+    string escaped(unescaped) ;
+    size_t pos ;
+    while ( (pos = unescaped.find('"', pos)) != string::npos ) {
+        escaped.replace(pos, 1, "\"\"");
+        pos += 2;
+    }
+
+    return '"' + escaped + '"' ;
 }
 
-} // namespace db
-} // namespace wspp
+} // namespace xdb
+

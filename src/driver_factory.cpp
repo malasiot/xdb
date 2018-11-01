@@ -32,31 +32,48 @@ std::shared_ptr<ConnectionHandle> DriverFactory::createConnection(const std::str
 
 }
 
+std::string& ltrim(std::string& str, const std::string& chars = "\t\n\v\f\r ")
+{
+    str.erase(0, str.find_first_not_of(chars));
+    return str;
+}
+
+std::string& rtrim(std::string& str, const std::string& chars = "\t\n\v\f\r ")
+{
+    str.erase(str.find_last_not_of(chars) + 1);
+    return str;
+}
+
+std::string& trim(std::string& str, const std::string& chars = "\t\n\v\f\r ")
+{
+    return ltrim(rtrim(str, chars), chars);
+}
 
 bool DriverFactory::parseParamString(const string &str, Dictionary &params)
 {
-    typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
+     std::size_t current, previous = 0;
 
-    boost::char_separator<char> sep(";");
+    while ( ( current = str.find(';', previous) ) != std::string::npos) {
+        string tok = str.substr(previous, current - previous) ;
+        previous = current + 1;
 
-    tokenizer tokens(str, sep);
-
-    for ( auto &&tok: tokens ) {
         size_t pos = tok.find('=') ;
 
         string key, val ;
 
         if ( pos == string::npos ) {
-            key = boost::trim_copy(tok) ;
+            key = trim(tok) ;
         }
         else {
-            key = boost::trim_copy(tok.substr(0, pos)) ;
-            val = boost::trim_copy(tok.substr(pos+1)) ;
+            key = tok.substr(0, pos) ; trim(key) ;
+            val = tok.substr(pos+1) ;  trim(val) ;
         }
 
         if ( key.empty() ) return false ;
         params.add(key, val) ;
+
     }
+
 }
 
 }

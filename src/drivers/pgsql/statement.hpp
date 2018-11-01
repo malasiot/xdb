@@ -1,13 +1,13 @@
-#ifndef __PGSQL_STATEMENT_HPP__
-#define __PGSQL_STATEMENT_HPP__
+#ifndef XDB_PGSQL_STATEMENT_HPP
+#define XDB_PGSQL_STATEMENT_HPP
 
 #include <libpq-fe.h>
 
-#include <wspp/database/statement_handle.hpp>
+#include <xdb/statement_handle.hpp>
 
 #include "parameters.hpp"
 
-namespace wspp { namespace db {
+namespace xdb {
 
 class PGSQLStatementHandle final: public StatementHandle, public std::enable_shared_from_this<PGSQLStatementHandle> {
 public:
@@ -61,6 +61,6 @@ private:
 
 
 } // namespace db
-} // namespace wspp
+
 
 #endif

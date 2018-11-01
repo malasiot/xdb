@@ -1,11 +1,11 @@
-#ifndef __DATABASE_SQLITE_DRIVER_CONNECTION_HPP__
-#define __DATABASE_SQLITE_DRIVER_CONNECTION_HPP__
+#ifndef XDB_SQLITE_DRIVER_CONNECTION_HPP
+#define XDB_SQLITE_DRIVER_CONNECTION_HPP
 
 #include <sqlite3.h>
 
-#include <wspp/database/connection_handle.hpp>
+#include <xdb/connection_handle.hpp>
 
-namespace wspp { namespace db {
+namespace xdb {
 
 class SQLiteConnectionHandle: public ConnectionHandle {
 public:
@@ -31,7 +31,7 @@ private:
 
 
 
-} // namespace db
-} // namespace wspp
+} // namespace xdb
+
 
 #endif

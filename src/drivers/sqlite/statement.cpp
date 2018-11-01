@@ -6,8 +6,7 @@
 
 using namespace std ;
 
-namespace wspp { namespace db {
-
+namespace xdb {
 
 void SQLiteStatementHandle::check() const {
     if ( !handle_ )
@@ -163,5 +162,5 @@ QueryResult SQLiteStatementHandle::execQuery()
     return QueryResult(QueryResultHandlePtr(new SQLiteQueryResultHandle(shared_from_this()))) ;
 }
 
-} // namespace db
-} // namespace wspp
+} // namespace xdb
+

@@ -1,9 +1,9 @@
-#include <wspp/database/transaction.hpp>
-#include <wspp/database/connection.hpp>
+#include <xdb/transaction.hpp>
+#include <xdb/connection.hpp>
 
 using namespace std ;
 
-namespace wspp { namespace db {
+namespace xdb {
 
 Transaction::Transaction(Connection &con): con_(con.handle()) {
     con_->begin() ;
@@ -19,4 +19,4 @@ void Transaction::rollback() {
 }
 
 } // namespace db
-} // namespace wspp
+

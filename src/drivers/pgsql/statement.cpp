@@ -4,12 +4,12 @@
 
 #include <cstring>
 
-#include <wspp/util/crypto.hpp>
+#include <random>
 
 using namespace std ;
-using namespace wspp::util ;
 
-namespace wspp { namespace db {
+
+namespace xdb {
 
 
 void PGSQLStatementHandle::check() const {
@@ -17,10 +17,31 @@ void PGSQLStatementHandle::check() const {
         throw Exception("Statement has not been compiled.");
 }
 
+// https://stackoverflow.com/questions/440133/how-do-i-create-a-random-alpha-numeric-string-in-c
+
+static std::string random_string(std::string::size_type length)
+{
+    static auto& chrs = "0123456789"
+        "abcdefghijklmnopqrstuvwxyz"
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    static std::mt19937 rg{std::random_device{}()};
+    static std::uniform_int_distribution<std::string::size_type> pick(0, sizeof(chrs) - 2);
+
+    std::string s;
+
+    s.reserve(length);
+
+    while(length--)
+        s += chrs[pick(rg)];
+
+    return s;
+}
+
 void PGSQLStatementHandle::prepare()
 {
     if ( name_.empty() ) {
-        name_ = binToHex(randomBytes(16)) ;
+        name_ = "ps_" + random_string(8) ;
 
         PGresult *r = PQprepare(handle_, name_.c_str(), sql_.c_str(), 0, nullptr) ;
 
@@ -140,7 +161,8 @@ StatementHandle &PGSQLStatementHandle::bind(int idx, const char *v){
 }
 
 int PGSQLStatementHandle::placeholderNameToIndex(const std::string &name) {
-    return boost::lexical_cast<int>(name.c_str()+1) ;
+    return stoi(name.c_str()+1) ;
+
 }
 
 void PGSQLStatementHandle::exec()
@@ -202,5 +224,5 @@ QueryResult PGSQLStatementHandle::execQuery()
     return QueryResult(QueryResultHandlePtr(new PGSQLQueryResultHandle(doExec()))) ;
 }
 
-} // namespace db
-               } // namespace wspp
+} // namespace xdb
+

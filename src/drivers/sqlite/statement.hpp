@@ -3,9 +3,9 @@
 
 #include <sqlite3.h>
 
-#include <wspp/database/statement_handle.hpp>
+#include <xdb/statement_handle.hpp>
 
-namespace wspp { namespace db {
+namespace xdb {
 
 class SQLiteStatementHandle final: public StatementHandle, public std::enable_shared_from_this<SQLiteStatementHandle> {
 public:
@@ -53,7 +53,7 @@ private:
 
 
 
-} // namespace db
-} // namespace wspp
+} // namespace xdb
+
 
 #endif

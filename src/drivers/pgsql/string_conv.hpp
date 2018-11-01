@@ -1,11 +1,12 @@
-#ifndef __PGSQL_STRING_CONV_HPP__
-#define __PGSQL_STRING_CONV_HPP__
+#ifndef XDB_PGSQL_STRING_CONV_HPP
+#define XDB_PGSQL_STRING_CONV_HPP
 
-#include <wspp/database/types.hpp>
+#include <xdb/types.hpp>
 #include <string>
+#include <sstream>
+#include <cstring>
 
-#include <boost/lexical_cast.hpp>
-namespace wspp { namespace db {
+namespace xdb {
 
 template<typename T>
 inline std::string pq_to_string(T val) {
@@ -24,13 +25,9 @@ template<> inline std::string pq_to_string(bool val) { return (val) ? "true" : "
 
 template<typename T>
 inline bool pq_from_string(const char *str, T &val) {
-    try {
-        val = boost::lexical_cast<T>(str) ;
-        return true ;
-    }
-    catch( const boost::bad_lexical_cast & ) {
-        return false ;
-    }
+    std::istringstream strm(str) ;
+    strm >> val ;
+    return strm.good() ;
 }
 
 template<>
@@ -80,6 +77,6 @@ inline bool pq_from_string(const char *str, bool &val) {
     return false ;
 }
 
-} // namespace db
-               } // namespace wspp
+} // namespace xdb
+
 #endif

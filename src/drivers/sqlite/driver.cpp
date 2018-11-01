@@ -2,10 +2,10 @@
 #include "connection.hpp"
 
 using namespace std ;
-namespace wspp {
-namespace db {
 
-ConnectionHandlePtr SQLiteDriver::open(const util::Dictionary &params) const {
+namespace xdb {
+
+ConnectionHandlePtr SQLiteDriver::open(const Dictionary &params) const {
     sqlite3 *handle ;
 
     int flags = 0 ;
@@ -30,4 +30,4 @@ ConnectionHandlePtr SQLiteDriver::open(const util::Dictionary &params) const {
         return ConnectionHandlePtr(new SQLiteConnectionHandle(handle)) ;
 }
 }
-}
+

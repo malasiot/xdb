@@ -1,14 +1,12 @@
-#include <wspp/database/statement_handle.hpp>
-#include <wspp/database/exception.hpp>
-
-#include <boost/format.hpp>
+#include <xdb/statement_handle.hpp>
+#include <xdb/exception.hpp>
 
 #include <cassert>
 #include <cstring>
 
 using namespace std ;
 
-namespace wspp { namespace db {
+namespace xdb {
 
 /*
 StatementHandle::StatementHandle(sqlite3 *con, const string &sql): last_arg_idx_(0)
@@ -258,5 +256,5 @@ void StatementHandle::read(int idx, Blob &blob) const
 
 #endif
 
-} // namespace db
-} // namespace wspp
+} // namespace xdb
+

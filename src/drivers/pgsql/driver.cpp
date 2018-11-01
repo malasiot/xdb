@@ -3,8 +3,8 @@
 
 using namespace std ;
 
-namespace wspp {
-namespace db {
+
+namespace xdb {
 
 static string escape_param_value(const string &src) {
     string dst ;
@@ -34,7 +34,7 @@ static string escape_param_value(const string &src) {
     else return dst ;
 }
 
-ConnectionHandlePtr PGSQLDriver::open(const util::Dictionary &params) const {
+ConnectionHandlePtr PGSQLDriver::open(const Dictionary &params) const {
 
     string conn_info ;
 
@@ -57,4 +57,4 @@ ConnectionHandlePtr PGSQLDriver::open(const util::Dictionary &params) const {
     else return ConnectionHandlePtr(new PGSQLConnectionHandle(handle)) ;
 }
 }
-}
+

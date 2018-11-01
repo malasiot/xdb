@@ -1,13 +1,13 @@
-#ifndef __PGSQL_PARAMETERS_HPP__
-#define __PGSQL_PARAMETERS_HPP__
+#ifndef XDB_PGSQL_PARAMETERS_HPP
+#define XDB_PGSQL_PARAMETERS_HPP
 
-#include <wspp/database/types.hpp>
+#include <xdb/types.hpp>
 #include <vector>
 #include <map>
 
 #include "string_conv.hpp"
 
-namespace wspp { namespace db {
+namespace xdb {
 
 // modified from pqxx
 
@@ -73,6 +73,6 @@ private:
 };
 
 
-} // namespace db
-} // namespace wspp
+} // namespace xdb
+
 #endif

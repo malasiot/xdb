@@ -5,7 +5,7 @@
 
 using namespace std ;
 
-namespace wspp { namespace db {
+namespace xdb {
 
 int PreparedStatementParameters::marshall(std::vector<const char *> &values,
         std::vector<int> &lengths,  std::vector<int> &binaries) const
@@ -22,7 +22,6 @@ int PreparedStatementParameters::marshall(std::vector<const char *> &values,
     lengths.clear();
     lengths.resize(array_size, 0);
     binaries.resize(array_size, 0);
-
 
     for( const auto &p: entries_ ) {
         int param = p.first - 1 ;
@@ -47,5 +46,5 @@ int PreparedStatementParameters::marshall(std::vector<const char *> &values,
     return elements;
 }
 
-} // namespace db
-               } // namespace wspp
+} // namespace xdb
+
