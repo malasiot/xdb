@@ -70,7 +70,7 @@ bool DriverFactory::parseParamString(const string &str, Dictionary &params)
         }
 
         if ( key.empty() ) return false ;
-        params.add(key, val) ;
+        params.emplace(key, val) ;
 
     }
 

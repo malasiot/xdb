@@ -8,7 +8,6 @@
 #include <xdb/connection_handle.hpp>
 #include <xdb/transaction.hpp>
 
-#include <xdb/dictionary.hpp>
 
 namespace xdb {
 

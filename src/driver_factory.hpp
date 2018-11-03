@@ -4,12 +4,11 @@
 #include <string>
 
 #include <xdb/connection.hpp>
-#include <xdb/dictionary.hpp>
 
 namespace xdb {
 
 class DriverFactory {
-
+    using Dictionary = std::map<std::string, std::string>;
 public:
 
     DriverFactory() = default ;

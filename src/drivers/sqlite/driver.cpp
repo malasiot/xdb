@@ -10,11 +10,15 @@ ConnectionHandlePtr SQLiteDriver::open(const Dictionary &params) const {
 
     int flags = 0 ;
 
-    string database = params.get("db") ;
+    string database ;
+    auto it = params.find("db") ;
+    if ( it == params.end() ) return nullptr ;
+    else database = it->second ;
 
-    if ( database.empty() ) return nullptr ;
-
-    string mode = params.get("mode", "rw") ;
+    string mode ;
+    it = params.find("mode") ;
+    if ( it == params.end() ) mode = "rw" ;
+    else mode = it->second ;
 
     if ( mode == "rw")
         flags |= SQLITE_OPEN_READWRITE ;
@@ -22,7 +26,6 @@ ConnectionHandlePtr SQLiteDriver::open(const Dictionary &params) const {
         flags |= SQLITE_OPEN_READONLY ;
     else if ( mode == "rc")
     flags |= SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE ;
-
 
     if ( sqlite3_open_v2(database.c_str(), &handle, flags, NULL)  != SQLITE_OK )
         return nullptr ;

@@ -4,11 +4,11 @@ using namespace std ;
 
 namespace xdb {
 
-Dictionary QueryResult::getAll() const
+QueryResult::Dictionary QueryResult::getAll() const
 {
     Dictionary res ;
     for( int i=0 ; i<columns() ; i++ ) {
-        res.add(columnName(i), get<string>(i) ) ;
+        res.emplace(columnName(i), get<string>(i) ) ;
     }
     return res ;
 }

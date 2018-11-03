@@ -2,8 +2,8 @@
 #define XDB_QUERY_RESULT_HPP
 
 #include <string>
+#include <map>
 
-#include <xdb/dictionary.hpp>
 #include <xdb/query_result_handle.hpp>
 
 #include <iostream>
@@ -14,9 +14,12 @@ class Row ;
 class Query ;
 class Column ;
 
+
 class QueryResult
 {
 
+
+    using Dictionary = std::map<std::string, std::string> ;
 public:
 
     QueryResult(QueryResult &&other) = default ;
