@@ -49,31 +49,48 @@ std::string& trim(std::string& str, const std::string& chars = "\t\n\v\f\r ")
     return ltrim(rtrim(str, chars), chars);
 }
 
-bool DriverFactory::parseParamString(const string &str, Dictionary &params)
-{
-     std::size_t current, previous = 0;
+static bool parse_key_val(std::string &tok, map<string, string> &params) {
 
-    while ( ( current = str.find(';', previous) ) != std::string::npos) {
-        string tok = str.substr(previous, current - previous) ;
-        previous = current + 1;
+    size_t pos = tok.find('=') ;
 
-        size_t pos = tok.find('=') ;
+    string key, val ;
 
-        string key, val ;
-
-        if ( pos == string::npos ) {
-            key = trim(tok) ;
-        }
-        else {
-            key = tok.substr(0, pos) ; trim(key) ;
-            val = tok.substr(pos+1) ;  trim(val) ;
-        }
-
-        if ( key.empty() ) return false ;
-        params.emplace(key, val) ;
-
+    if ( pos == string::npos ) {
+        key = trim(tok) ;
+    }
+    else {
+        key = tok.substr(0, pos) ; trim(key) ;
+        val = tok.substr(pos+1) ;  trim(val) ;
     }
 
+    if ( key.empty() ) return false ;
+    params.emplace(key, val) ;
+
+    return true ;
+
+}
+
+bool DriverFactory::parseParamString(const string &str, Dictionary &params)
+{
+    auto previous = str.begin() ;
+    auto next = std::find(previous, str.end(), ';') ;
+
+    while ( next != str.end() ) {
+
+        string tok(previous, next) ;
+        next = previous + 1;
+
+        if ( ! parse_key_val(tok, params) ) return false ;
+
+        next = std::find(previous, str.end(), ';');
+    }
+
+    if ( previous != str.end() )  {
+        string tok(previous, str.end()) ;
+        if ( !parse_key_val(tok, params) ) return false ;
+    }
+
+    return true ;
 }
 
 }
