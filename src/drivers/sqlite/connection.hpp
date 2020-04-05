@@ -5,7 +5,7 @@
 
 #include <wspp/database/connection_handle.hpp>
 
-namespace wspp { namespace db {
+namespace cvx { namespace db {
 
 class SQLiteConnectionHandle: public ConnectionHandle {
 public:

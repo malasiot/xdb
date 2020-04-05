@@ -8,7 +8,7 @@
 
 using namespace std ;
 
-namespace wspp { namespace db {
+namespace cvx { namespace db {
 
 /*
 StatementHandle::StatementHandle(sqlite3 *con, const string &sql): last_arg_idx_(0)

@@ -5,7 +5,7 @@
 
 #include <wspp/database/statement_handle.hpp>
 
-namespace wspp { namespace db {
+namespace cvx { namespace db {
 
 class SQLiteStatementHandle final: public StatementHandle, public std::enable_shared_from_this<SQLiteStatementHandle> {
 public:

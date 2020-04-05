@@ -2,7 +2,7 @@
 #include <wspp/database/connection.hpp>
 
 using namespace std ;
-namespace wspp { namespace db {
+namespace cvx { namespace db {
 
 Query::Query(Connection &con, const string &sql):
     Statement(con, sql) {

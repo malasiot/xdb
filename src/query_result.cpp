@@ -2,7 +2,7 @@
 
 using namespace std ;
 
-namespace wspp { namespace db {
+namespace cvx { namespace db {
 
 util::Dictionary QueryResult::getAll() const
 {

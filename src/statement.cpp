@@ -5,7 +5,7 @@
 
 using namespace std ;
 
-namespace wspp { namespace db {
+namespace cvx { namespace db {
 
 Statement::Statement(Connection &con, const std::string & sql) {
     con.check() ;

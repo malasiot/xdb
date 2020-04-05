@@ -3,7 +3,7 @@
 
 using namespace std ;
 
-namespace wspp { namespace db {
+namespace cvx { namespace db {
 
 Transaction::Transaction(Connection &con): con_(con.handle()) {
     con_->begin() ;

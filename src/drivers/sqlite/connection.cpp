@@ -4,7 +4,7 @@
 
 using namespace std ;
 
-namespace wspp {
+namespace cvx {
 namespace db {
 
 void SQLiteConnectionHandle::close() {

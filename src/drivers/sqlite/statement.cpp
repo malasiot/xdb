@@ -6,7 +6,7 @@
 
 using namespace std ;
 
-namespace wspp { namespace db {
+namespace cvx { namespace db {
 
 
 void SQLiteStatementHandle::check() const {

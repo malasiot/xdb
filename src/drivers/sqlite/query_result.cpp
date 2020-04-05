@@ -5,11 +5,11 @@
 
 #include <boost/format.hpp>
 
-namespace wspp {
+namespace cvx {
 namespace db {
 
 
-SQLiteQueryResultHandle::SQLiteQueryResultHandle(const std::shared_ptr<wspp::db::SQLiteStatementHandle> &stmt): stmt_(stmt) {
+SQLiteQueryResultHandle::SQLiteQueryResultHandle(const std::shared_ptr<cvx::db::SQLiteStatementHandle> &stmt): stmt_(stmt) {
 
     int num_fields = sqlite3_column_count(stmt_->handle());
 

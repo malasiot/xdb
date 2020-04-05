@@ -2,7 +2,7 @@
 #include "connection.hpp"
 
 using namespace std ;
-namespace wspp {
+namespace cvx {
 namespace db {
 
 ConnectionHandlePtr SQLiteDriver::open(const util::Dictionary &params) const {

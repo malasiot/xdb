@@ -6,7 +6,7 @@
 
 #include "statement.hpp"
 
-namespace wspp {
+namespace cvx {
 namespace db {
 
 class SQLiteQueryResultHandle: public QueryResultHandle {

@@ -2,7 +2,7 @@
 
 using namespace std ;
 
-namespace wspp { namespace db {
+namespace cvx { namespace db {
 
 Exception::Exception(const std::string &msg): std::runtime_error(msg) {}
 

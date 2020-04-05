@@ -5,7 +5,7 @@
 
 #include <sqlite3.h>
 
-namespace wspp { namespace db {
+namespace cvx { namespace db {
 
 class SQLiteException: public Exception {
 public:
