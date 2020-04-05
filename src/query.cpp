@@ -1,8 +1,9 @@
-#include <wspp/database/query.hpp>
-#include <wspp/database/connection.hpp>
+#include <xdb/query.hpp>
+#include <xdb/connection.hpp>
 
 using namespace std ;
-namespace cvx { namespace db {
+
+namespace xdb {
 
 Query::Query(Connection &con, const string &sql):
     Statement(con, sql) {
@@ -14,5 +15,4 @@ QueryResult Query::exec()
 }
 
 
-} // namespace util
-} // namespace wspp
+} // namespace xdb

@@ -1,11 +1,11 @@
-#ifndef __PGSQL_EXCEPTIONS_HPP__
-#define __PGSQL_EXCEPTIONS_HPP__
+#ifndef XDB_PGSQL_EXCEPTIONS_HPP
+#define XDB_PGSQL_EXCEPTIONS_HPP
 
-#include <wspp/database/exception.hpp>
+#include <xdb/exception.hpp>
 
 #include <libpq-fe.h>
 
-namespace wspp { namespace db {
+namespace xdb {
 
 class PGSQLException: public Exception {
 public:
@@ -15,7 +15,7 @@ public:
     }
 };
 
-} // namespace db
-} // namespace wspp
+} // namespace xdb
+
 
 #endif

@@ -1,14 +1,14 @@
-#include <wspp/database/query_result.hpp>
+#include <xdb/query_result.hpp>
 
 using namespace std ;
 
-namespace cvx { namespace db {
+namespace xdb {
 
-util::Dictionary QueryResult::getAll() const
+QueryResult::Dictionary QueryResult::getAll() const
 {
-    util::Dictionary res ;
+    Dictionary res ;
     for( int i=0 ; i<columns() ; i++ ) {
-        res.add(columnName(i), get<string>(i) ) ;
+        res.emplace(columnName(i), get<string>(i) ) ;
     }
     return res ;
 }
@@ -16,8 +16,5 @@ util::Dictionary QueryResult::getAll() const
 
 QueryResult::iterator::iterator(QueryResult &res, bool at_end): qres_(res), at_end_(at_end), current_(new Row(qres_)) {}
 
+} // namespace xdb
 
-
-
-} // namespace db
-               } // namespace wspp

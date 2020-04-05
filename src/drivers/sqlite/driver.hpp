@@ -2,7 +2,7 @@
 #define XDB_SQLITE_DRIVER_HPP
 
 #include <memory>
-#include <xdb/dictionary.hpp>
+#include <map>
 
 namespace xdb {
 
@@ -19,7 +19,7 @@ class ConnectionHandle ;
 // see documentation for explanation (https://www.sqlite.org/c3ref/open.html)
 
 class SQLiteDriver {
-
+using Dictionary = std::map<std::string, std::string>;
 public:
 
     SQLiteDriver() = default ;

@@ -1,15 +1,14 @@
-#ifndef __PGSQL_QUERY_RESULT_HANDLE_HPP__
-#define __PGSQL_QUERY_RESULT_HANDLE_HPP__
+#ifndef XDB_PGSQL_QUERY_RESULT_HANDLE_HPP
+#define XDB_PGSQL_QUERY_RESULT_HANDLE_HPP
 
-#include <wspp/database/query_result_handle.hpp>
-#include <wspp/database/types.hpp>
+#include <xdb/query_result_handle.hpp>
+#include <xdb/types.hpp>
 
 #include "statement.hpp"
 
 #include <memory>
 
-namespace wspp {
-namespace db {
+namespace xdb {
 
 using PGResultPtr = std::unique_ptr<PGresult, decltype(&PQclear)> ;
 
@@ -59,6 +58,6 @@ private:
 } ;
 
 }
-}
+
 
 #endif

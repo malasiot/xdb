@@ -3,9 +3,9 @@
 
 #include <libpq-fe.h>
 
-#include <wspp/database/connection_handle.hpp>
+#include <xdb/connection_handle.hpp>
 
-namespace wspp { namespace db {
+namespace xdb {
 
 class PGSQLConnectionHandle: public ConnectionHandle {
 public:
@@ -31,7 +31,7 @@ private:
 
 
 
-} // namespace db
-} // namespace wspp
+} // namespace xdb
+
 
 #endif

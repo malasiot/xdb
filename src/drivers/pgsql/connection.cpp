@@ -4,8 +4,7 @@
 
 using namespace std ;
 
-namespace wspp {
-namespace db {
+namespace xdb {
 
 void PGSQLConnectionHandle::close() {
     PQfinish(handle_) ;
@@ -49,5 +48,5 @@ uint64_t PGSQLConnectionHandle::last_insert_rowid() const
     return 0 ;
 }
 
-}
+
 }

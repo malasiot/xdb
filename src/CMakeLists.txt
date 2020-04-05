@@ -19,7 +19,7 @@ SET( SOURCES
 
 IF ( PostgreSQL_FOUND )
     ADD_DEFINITIONS("-DHAS_PGSQL_DRIVER")
-    LIST(APPEND UTIL_SOURCES
+    LIST(APPEND SOURCES
         drivers/pgsql/driver.cpp
         drivers/pgsql/connection.cpp
         drivers/pgsql/exceptions.cpp

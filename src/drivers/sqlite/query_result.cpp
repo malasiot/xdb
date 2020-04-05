@@ -1,15 +1,22 @@
 #include "query_result.hpp"
 #include "exceptions.hpp"
 
-#include <wspp/database/types.hpp>
+#include <sstream>
+#include <xdb/types.hpp>
 
-#include <boost/format.hpp>
+using namespace std ;
 
+<<<<<<< HEAD
 namespace cvx {
 namespace db {
 
 
 SQLiteQueryResultHandle::SQLiteQueryResultHandle(const std::shared_ptr<cvx::db::SQLiteStatementHandle> &stmt): stmt_(stmt) {
+=======
+namespace xdb {
+
+SQLiteQueryResultHandle::SQLiteQueryResultHandle(const std::shared_ptr<SQLiteStatementHandle> &stmt): stmt_(stmt) {
+>>>>>>> 8b21f6742f70ee3f2566dd657a827a8c7ca70f93
 
     int num_fields = sqlite3_column_count(stmt_->handle());
 
@@ -60,7 +67,11 @@ int SQLiteQueryResultHandle::columnType(int idx) const {
 std::string SQLiteQueryResultHandle::columnName(int idx) const  {
     check_has_row() ;
     const char *name = sqlite3_column_name(stmt_->handle(), idx)  ;
-    if ( name == nullptr ) throw Exception(str(boost::format("There is no column with index %d") % idx)) ;
+    if ( name == nullptr ) {
+        ostringstream strm ;
+        strm << "There is no column with index " << idx ;
+        throw Exception(strm.str()) ;
+    }
     else return name ;
 }
 
@@ -147,6 +158,6 @@ void SQLiteQueryResultHandle::read(int idx, Blob &blob) const {
 }
 
 }
-}
+
 
 

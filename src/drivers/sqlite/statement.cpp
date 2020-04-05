@@ -6,8 +6,12 @@
 
 using namespace std ;
 
+<<<<<<< HEAD
 namespace cvx { namespace db {
 
+=======
+namespace xdb {
+>>>>>>> 8b21f6742f70ee3f2566dd657a827a8c7ca70f93
 
 void SQLiteStatementHandle::check() const {
     if ( !handle_ )
@@ -163,5 +167,5 @@ QueryResult SQLiteStatementHandle::execQuery()
     return QueryResult(QueryResultHandlePtr(new SQLiteQueryResultHandle(shared_from_this()))) ;
 }
 
-} // namespace db
-} // namespace wspp
+} // namespace xdb
+

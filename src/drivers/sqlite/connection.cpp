@@ -4,8 +4,7 @@
 
 using namespace std ;
 
-namespace cvx {
-namespace db {
+namespace xdb {
 
 void SQLiteConnectionHandle::close() {
     sqlite3_close(handle_) ;
@@ -61,5 +60,5 @@ uint64_t SQLiteConnectionHandle::last_insert_rowid() const
     return sqlite3_last_insert_rowid(handle_) ;
 }
 
-}
+
 }

@@ -1,11 +1,15 @@
-#ifndef __SQLITE_EXCEPTIONS_HPP__
-#define __SQLITE_EXCEPTIONS_HPP__
+#ifndef XDB_SQLITE_EXCEPTIONS_HPP
+#define XDB_SQLITE_EXCEPTIONS_HPP
 
-#include <wspp/database/exception.hpp>
+#include <xdb/exception.hpp>
 
 #include <sqlite3.h>
 
+<<<<<<< HEAD
 namespace cvx { namespace db {
+=======
+namespace xdb {
+>>>>>>> 8b21f6742f70ee3f2566dd657a827a8c7ca70f93
 
 class SQLiteException: public Exception {
 public:
@@ -13,6 +17,6 @@ public:
 };
 
 } // namespace db
-} // namespace wspp
+
 
 #endif
