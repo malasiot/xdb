@@ -5,11 +5,7 @@
 
 #include <xdb/statement_handle.hpp>
 
-<<<<<<< HEAD
-namespace cvx { namespace db {
-=======
 namespace xdb {
->>>>>>> 8b21f6742f70ee3f2566dd657a827a8c7ca70f93
 
 class SQLiteStatementHandle final: public StatementHandle, public std::enable_shared_from_this<SQLiteStatementHandle> {
 public:

@@ -6,12 +6,7 @@
 
 #include "statement.hpp"
 
-<<<<<<< HEAD
-namespace cvx {
-namespace db {
-=======
 namespace xdb {
->>>>>>> 8b21f6742f70ee3f2566dd657a827a8c7ca70f93
 
 class SQLiteQueryResultHandle: public QueryResultHandle {
 public:
