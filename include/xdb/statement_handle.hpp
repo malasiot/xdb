@@ -5,8 +5,6 @@
 #include <xdb/query_result.hpp>
 #include <xdb/types.hpp>
 
-#include <boost/optional.hpp>
-
 #include <string>
 #include <map>
 #include <memory>

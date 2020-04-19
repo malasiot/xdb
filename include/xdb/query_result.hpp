@@ -83,7 +83,7 @@ public:
     }
 #ifdef HAS_OPTIONAL
     template<class T>
-    void read(int idx, boost::optional<T> &val) const {
+    void read(int idx, std::optional<T> &val) const {
         if ( !columnIsNull(idx) ) {
             T v ;
             handle_->read(idx, v) ;
