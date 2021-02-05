@@ -1,24 +1,14 @@
 PROJECT(xdb)
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.4)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.14)
 
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/CMake/ ${CMAKE_ROOT}/Modules/   )
 
-FIND_PACKAGE(Sqlite3 REQUIRED)
+include(setup)
+include(dependencies)
 
-set(PostgreSQL_ADDITIONAL_VERSIONS "9.3")
-FIND_PACKAGE(PostgreSQL)
+add_subdirectory(src)
+#add_subdirectory(test)
 
-INCLUDE_DIRECTORIES(
-        include
-        ${SQLITE3_INCLUDE_DIR}
-        ${PostgreSQL_INCLUDE_DIRS}
-
-)
-
-ADD_DEFINITIONS( -std=c++11 )
-
-ADD_SUBDIRECTORY(src)
-#ADD_SUBDIRECTORY(test)
-
+include(install)
 

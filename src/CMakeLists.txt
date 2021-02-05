@@ -1,6 +1,4 @@
-SET( SOURCES
-
-    
+set( SOURCES
     connection.cpp
     driver_factory.cpp
     exception.cpp
@@ -17,9 +15,9 @@ SET( SOURCES
     drivers/sqlite/query_result.cpp
 )
 
-IF ( PostgreSQL_FOUND )
-    ADD_DEFINITIONS("-DHAS_PGSQL_DRIVER")
-    LIST(APPEND SOURCES
+if ( PostgreSQL_FOUND )
+    add_definitions("-DHAS_PGSQL_DRIVER")
+    list(APPEND SOURCES
         drivers/pgsql/driver.cpp
         drivers/pgsql/connection.cpp
         drivers/pgsql/exceptions.cpp
@@ -27,9 +25,41 @@ IF ( PostgreSQL_FOUND )
         drivers/pgsql/query_result.cpp
         drivers/pgsql/parameters.cpp
 )
-ENDIF ( PostgreSQL_FOUND )
+endif ( PostgreSQL_FOUND )
 
-ADD_LIBRARY(xdb SHARED ${SOURCES})
+add_library(xdb ${LIBRARY_TYPE} ${SOURCES})
+
+target_include_directories(xdb PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+  $<INSTALL_INTERFACE:include> PRIVATE ${CMAKE_SOURCE_DIR}/src)
+
+
+include_directories(
+   ${SQLite3_INCLUDE_DIRS}
+   ${PostgreSQL_INCLUDE_DIRS}
+)
+
+target_link_libraries(xdb
+    ${SQLite3_LIBRARIES}
+    ${PostgreSQL_LIBRARIES}
+    dl
+    z
+    pthread
+)
+
+# Install library
+install(TARGETS xdb
+  EXPORT ${PROJECT_NAME}-export
+  RUNTIME DESTINATION "${INSTALL_BIN_DIR}" COMPONENT bin
+  LIBRARY DESTINATION "${INSTALL_LIB_DIR}" COMPONENT shlib
+  ARCHIVE DESTINATION "${INSTALL_LIB_DIR}" COMPONENT stlib
+  COMPONENT dev)
+
+# Install headers
+install(DIRECTORY "${LIBRARY_INCLUDE_DIR}" DESTINATION "${INSTALL_INCLUDE_DIR}/xdb" )
+
+
 TARGET_LINK_LIBRARIES(xdb ${SQLITE3_LIBRARY} ${PostgreSQL_LIBRARIES} dl z pthread )
 
 
