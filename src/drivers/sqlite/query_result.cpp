@@ -146,7 +146,13 @@ void SQLiteQueryResultHandle::read(int idx, Blob &blob) const {
     check_has_row() ;
     const void *data = sqlite3_column_blob(stmt_->handle(), idx);
     int bytes = sqlite3_column_bytes(stmt_->handle(), idx) ;
-    blob = Blob((const char *)data, bytes) ;
+    
+    std::vector<uint8_t> bdata(
+        reinterpret_cast<const uint8_t*>(data),
+        reinterpret_cast<const uint8_t*>(data) + bytes
+    );
+    
+    blob.setData(bdata) ;
 }
 
 }

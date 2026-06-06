@@ -27,6 +27,17 @@ if ( PostgreSQL_FOUND )
 )
 endif ( PostgreSQL_FOUND )
 
+if ( TARGET PkgConfig::MARIADB )
+    list(APPEND SOURCES
+        drivers/mysql/driver.cpp
+        drivers/mysql/connection.cpp
+        drivers/mysql/exceptions.cpp
+        drivers/mysql/statement.cpp
+        drivers/mysql/query_result.cpp
+  #      drivers/mysql/parameters.cpp
+    )
+endif()
+
 add_library(xdb ${LIBRARY_TYPE} ${SOURCES})
 
 target_include_directories(xdb PUBLIC
@@ -41,12 +52,18 @@ include_directories(
 )
 
 target_link_libraries(xdb
-    ${SQLite3_LIBRARIES}
-    ${PostgreSQL_LIBRARIES}
-    dl
-    z
-    pthread
+    PRIVATE SQLite::SQLite3 dl z pthread
 )
+
+if ( PostgreSQL_FOUND )
+    target_link_libraries(xdb PRIVATE PostgreSQL::PostgreSQL)
+    target_compile_definitions(xdb PRIVATE HAS_PGSQL_DRIVER)
+endif (  PostgreSQL_FOUND )  
+
+if ( TARGET PkgConfig::MARIADB )
+    target_link_libraries(xdb PRIVATE PkgConfig::MARIADB)
+    target_compile_definitions(xdb PRIVATE HAS_MYSQL_DRIVER)
+endif (  )  
 
 # Install library
 install(TARGETS xdb
@@ -58,8 +75,5 @@ install(TARGETS xdb
 
 # Install headers
 install(DIRECTORY "${LIBRARY_INCLUDE_DIR}" DESTINATION "${INSTALL_INCLUDE_DIR}/xdb" )
-
-
-TARGET_LINK_LIBRARIES(xdb ${SQLITE3_LIBRARY} ${PostgreSQL_LIBRARIES} dl z pthread )
 
 

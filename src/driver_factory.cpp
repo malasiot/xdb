@@ -6,6 +6,9 @@
 #include "drivers/pgsql/driver.hpp"
 #endif
 
+#ifdef HAS_MYSQL_DRIVER
+#include "drivers/mysql/driver.hpp"
+#endif
 
 #include <algorithm>
 
@@ -29,6 +32,10 @@ std::shared_ptr<ConnectionHandle> DriverFactory::createConnection(const std::str
 #ifdef HAS_PGSQL_DRIVER
     if ( driver_name == "pgsql")
         return PGSQLDriver::instance().open(params) ;
+#endif
+#ifdef HAS_MYSQL_DRIVER
+    if ( driver_name == "mysql")
+        return MySQLDriver::instance().open(params) ;
 #endif
     return nullptr ;
 
@@ -80,7 +87,7 @@ bool DriverFactory::parseParamString(const string &str, Dictionary &params)
     while ( next != str.end() ) {
 
         string tok(previous, next) ;
-        next = previous + 1;
+        previous = next + 1;
 
         if ( ! parse_key_val(tok, params) ) return false ;
 

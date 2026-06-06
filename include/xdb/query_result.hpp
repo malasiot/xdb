@@ -17,9 +17,7 @@ class Column ;
 
 class QueryResult
 {
-
-
-    using Dictionary = std::map<std::string, std::string> ;
+    using dictionary_t = std::map<std::string, std::string> ;
 public:
 
     QueryResult(QueryResult &&other) = default ;
@@ -29,7 +27,8 @@ public:
 
     // read next row
     bool next() {
-        return handle_->next() ;
+        is_valid_ = handle_->next() ;
+        return is_valid_ ;
     }
 
     // number of columns returned
@@ -61,10 +60,19 @@ public:
     // has a column with given name
     bool hasColumn(const std::string &name) const ;
 
+     operator bool () const { return is_valid_ ; }
+
     template<class T>
     T get(int idx) const {
         T v ;
         handle_->read(idx, v) ;
+        return v ;
+    }
+
+    template<class T>
+    std::optional<T> getOptional(int idx) const {
+        std::optional<T> v ;
+        read(idx, v) ;
         return v ;
     }
 
@@ -74,6 +82,12 @@ public:
         return get<T>(idx) ;
     }
 
+    template <class T>
+    std::optional<T> getOptional(const std::string &name) const {
+        int idx = columnIdx(name) ;
+        return getOptional<T>(idx) ;
+    }
+
     // advanve cursor and get the row pointed by
     Row getOne() ;
 
@@ -81,7 +95,7 @@ public:
     void read(int idx, T &val) const {
         handle_->read(idx, val) ;
     }
-#ifdef HAS_OPTIONAL
+
     template<class T>
     void read(int idx, std::optional<T> &val) const {
         if ( !columnIsNull(idx) ) {
@@ -90,7 +104,7 @@ public:
             val = v ;
         }
     }
-#endif
+
     void reset() {
         handle_->reset() ;
     }
@@ -100,8 +114,7 @@ public:
         readi(0, args...) ;
     }
 
-
-    Dictionary getAll() const ;
+    dictionary_t getAll() const ;
 
     class iterator {
     public:
@@ -110,7 +123,7 @@ public:
         iterator(iterator &&other) = default;
 
         iterator& operator=(const iterator &other) = delete;
-        iterator& operator=(iterator &&other) = default;
+        iterator& operator=(iterator &&other) = delete;
 
         bool operator==(const iterator &other) const { return ( at_end_ == other.at_end_ ) ; }
         bool operator!=(const iterator &other) const { return ( at_end_ != other.at_end_ ) ; }
@@ -137,6 +150,7 @@ public:
 private:
 
     QueryResultHandlePtr handle_ ;
+    bool is_valid_ = false ;
 
     template <typename T>
     void readi(int idx, T &t) const {
@@ -181,6 +195,7 @@ public:
     Column operator [] (int idx) const { return Column(qres_, idx); }
     Column operator [] (const std::string &name) const { return Column(qres_, name); }
 
+    operator bool() const { return (bool)qres_ ; }
 
     // number of columns returned
     int columns() const { return qres_.columns(); }
@@ -212,6 +227,16 @@ public:
 
     template <class T>
     T get(const std::string &name) const {
+        return qres_.get<T>(name) ;
+    }
+
+    template<class T>
+    std::optional<T> getOptional(int idx) const {
+        return qres_.getOptional<T>(idx) ;
+    }
+
+    template <class T>
+    std::optional<T> getOptional(const std::string &name) const {
         return qres_.get<T>(name) ;
     }
 

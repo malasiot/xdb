@@ -1,16 +1,16 @@
-#ifndef XDB_SQLITE_DRIVER_CONNECTION_HPP
-#define XDB_SQLITE_DRIVER_CONNECTION_HPP
+#ifndef XDB_MYSQL_DRIVER_CONNECTION_HPP
+#define XDB_MYSQL_DRIVER_CONNECTION_HPP
 
-#include <sqlite3.h>
+#include <mysql.h>
 
 #include <xdb/connection_handle.hpp>
 
 namespace xdb {
 
-class SQLiteConnectionHandle: public ConnectionHandle {
+class MySQLConnectionHandle: public ConnectionHandle {
 public:
-    SQLiteConnectionHandle(sqlite3 *handle): handle_(handle) {}
-    ~SQLiteConnectionHandle() { close() ; }
+    MySQLConnectionHandle(MYSQL *handle): handle_(handle) {}
+    ~MySQLConnectionHandle() { close() ; }
 
     void close() override ;
 
@@ -26,7 +26,7 @@ private:
 
     void exec(const char *sql...);
 
-    sqlite3 *handle_ ;
+    MYSQL *handle_ ;
 };
 
 

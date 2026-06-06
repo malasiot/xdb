@@ -10,24 +10,24 @@ void SQLiteConnectionHandle::close() {
     sqlite3_close(handle_) ;
 }
 
-StatementHandlePtr SQLiteConnectionHandle::createStatement(const std::string &sql)
+StatementHandlePtr SQLiteConnectionHandle::createStatement(const char *sql)
 {
     const char * tail = 0;
 
     sqlite3_stmt *stmt ;
-    if ( sqlite3_prepare_v2(handle_, sql.c_str(), -1, &stmt ,&tail) != SQLITE_OK )
+    if ( sqlite3_prepare_v2(handle_, sql, -1, &stmt ,&tail) != SQLITE_OK )
         throw SQLiteException(handle_) ;
 
     return StatementHandlePtr(new SQLiteStatementHandle(stmt)) ;
 }
 
 
-void SQLiteConnectionHandle::exec(const string &sql, ...)
+void SQLiteConnectionHandle::exec(const char *sql, ...)
 {
     va_list arguments ;
     va_start(arguments, sql);
 
-    char *sql_e = sqlite3_vmprintf(sql.c_str(), arguments) ;
+    char *sql_e = sqlite3_vmprintf(sql, arguments) ;
 
     char *err_msg ;
     if ( sqlite3_exec(handle_, sql_e, NULL, NULL, &err_msg) != SQLITE_OK ) {

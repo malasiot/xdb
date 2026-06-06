@@ -5,7 +5,7 @@ using namespace std ;
 
 namespace xdb {
 
-Statement::Statement(Connection &con, const std::string & sql) {
+Statement::Statement(Connection &con, const char *sql) {
     con.check() ;
     stmt_ = con.handle()->createStatement(sql) ;
 }

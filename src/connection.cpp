@@ -41,13 +41,13 @@ void Connection::close() {
 
 }
 
-Statement Connection::prepareStatement(const string &sql)
+Statement Connection::prepareStatement(const char *sql)
 {
     return Statement(*this, sql) ;
 }
 
 
-Query Connection::prepareQuery(const string &sql) {
+Query Connection::prepareQuery(const char *sql) {
     return Query(*this, sql) ;
 }
 

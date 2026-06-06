@@ -4,9 +4,9 @@ using namespace std ;
 
 namespace xdb {
 
-QueryResult::Dictionary QueryResult::getAll() const
+QueryResult::dictionary_t QueryResult::getAll() const
 {
-    Dictionary res ;
+    dictionary_t res ;
     for( int i=0 ; i<columns() ; i++ ) {
         res.emplace(columnName(i), get<string>(i) ) ;
     }

@@ -2,12 +2,15 @@
 #define XDB_TYPES_HPP
 
 #include <cstdint>
+#include <vector>
 
 namespace xdb {
 
 class NullType {} ;
 
 // Wraps pointer to buffer and its size. Memory management is external
+
+/*
 class Blob {
 public:
 
@@ -20,6 +23,22 @@ public:
 private:
     const char *data_ = nullptr;
     uint32_t size_ = 0 ;
+};*/
+
+class Blob {
+public:
+
+    Blob() = default ;
+    Blob(std::vector<uint8_t> &&data): data_(std::move(data)) {}
+
+    const char *data() const { return (const char *)data_.data() ; }
+    uint32_t size() const { return data_.size() ; }
+    void setData(std::vector<uint8_t> &data) {
+        data_ = std::move(data) ;
+    }
+
+private:
+    std::vector<uint8_t> data_ ;
 };
 
 

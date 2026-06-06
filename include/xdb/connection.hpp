@@ -8,7 +8,6 @@
 #include <xdb/connection_handle.hpp>
 #include <xdb/transaction.hpp>
 
-
 namespace xdb {
 
 class Statement ;
@@ -24,7 +23,7 @@ public:
     Connection(const Connection &other) = delete ;
     Connection &operator = ( const Connection &other) = delete ;
 
-    // open connection to database withe given params
+    // open connection to database with given params
     void open(const std::string &dsn);
     void close() ;
 
@@ -34,27 +33,19 @@ public:
         return handle_->last_insert_rowid() ;
     }
 
-//   sqlite3_int64 last_insert_rowid() {
-//       return sqlite3_last_insert_rowid(handle_);
-//   }
-
-//    int changes() {
-//        return sqlite3_changes(handle_);
-//    }
-
     ConnectionHandlePtr handle() const { return handle_ ; }
 
-    Statement prepareStatement(const std::string &sql) ;
-    Query prepareQuery(const std::string &sql) ;
+    Statement prepareStatement(const char * sql) ;
+    Query prepareQuery(const char *sql) ;
 
     // helper for creating a connection and binding parameters
     template<typename ...Args>
-    QueryResult query(const std::string & sql, Args... args) {
+    QueryResult query(const char *sql, Args... args) {
         return Query(*this, sql)(args...) ;
     }
 
     template<typename ...Args>
-    void execute(const std::string &sql, Args... args) {
+    void execute(const char *sql, Args... args) {
         Statement(*this, sql)(args...) ;
     }
 
@@ -66,7 +57,6 @@ protected:
 
     std::shared_ptr<ConnectionHandle> handle_ ;
 };
-
 
 
 } // namespace xdb

@@ -12,7 +12,7 @@ public:
 
     virtual ~ConnectionHandle() {}
     virtual void close() = 0 ;
-    virtual StatementHandlePtr createStatement(const std::string &sql) = 0;
+    virtual StatementHandlePtr createStatement(const char *sql) = 0;
 
     virtual void begin() = 0 ;
     virtual void commit() = 0 ;

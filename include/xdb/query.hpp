@@ -12,10 +12,10 @@ class QueryResult ;
 
 class Query: public Statement {
 public:
-    Query(Connection &con, const std::string &sqlite) ;
+    Query(Connection &con, const char *sql) ;
 
     template<typename ...Args>
-    Query(Connection& con, const std::string & sql, Args... args): Query(con, sql) {
+    Query(Connection& con, const char *sql, Args... args): Query(con, sql) {
         bindAll(args...) ;
     }
 

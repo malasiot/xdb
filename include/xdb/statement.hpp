@@ -20,11 +20,11 @@ class Statement
 {
 public:
 
-    Statement(Connection &con, const std::string &sql) ;
+    Statement(Connection &con, const char *sql) ;
 
     // helper for creating a connection and binding parameters
     template<typename ...Args>
-    Statement(Connection& con, const std::string & sql, Args... args): Statement(con, sql) {
+    Statement(Connection& con, const char *sql, Args... args): Statement(con, sql) {
         bindAll(args...) ;
     }
 
@@ -54,7 +54,7 @@ public:
 
     template <typename ... Args>
     Statement &bindAll(Args&& ... args) {
-        return bindm((uint)1, args...) ;
+        return bindm((uint)0, args...) ;
     }
 
     // bind values and execute statement

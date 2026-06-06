@@ -5,7 +5,7 @@ using namespace std ;
 
 namespace xdb {
 
-Query::Query(Connection &con, const string &sql):
+Query::Query(Connection &con, const char *sql):
     Statement(con, sql) {
 }
 
