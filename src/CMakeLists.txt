@@ -31,10 +31,8 @@ if ( TARGET PkgConfig::MARIADB )
     list(APPEND SOURCES
         drivers/mysql/driver.cpp
         drivers/mysql/connection.cpp
-        drivers/mysql/exceptions.cpp
         drivers/mysql/statement.cpp
         drivers/mysql/query_result.cpp
-  #      drivers/mysql/parameters.cpp
     )
 endif()
 

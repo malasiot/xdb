@@ -14,6 +14,17 @@ class Row ;
 class Query ;
 class Column ;
 
+// stores the result of a query operation. you may then iterate over the results with two ways
+//  while ( res.next() ) {
+//      string val = res.get<string>(0), address ;
+//      res.into(val, address) ;
+//  } 
+// or using a for loop
+//  for ( auto row: res ) {
+//      string val = row.get<string>(0), address ;
+//      row.int(val, address) ;
+//      row >> val >> address ;
+//  }
 
 class QueryResult
 {
@@ -25,7 +36,7 @@ public:
     QueryResult& operator=(const QueryResult &other) = delete;
     QueryResult& operator=(QueryResult &&other) = default;
 
-    // read next row
+    // read next row return false if finished
     bool next() {
         is_valid_ = handle_->next() ;
         return is_valid_ ;
@@ -36,8 +47,7 @@ public:
         return handle_->columns() ;
     }
 
-    // type of the column
-
+    // type of the column (driver dependent)
     int columnType(int idx) const {
         return handle_->columnType(idx) ;
     }
@@ -46,6 +56,7 @@ public:
     std::string columnName(int idx) const {
         return handle_->columnName(idx) ;
     }
+
     // index of column with given name
     int columnIdx(const std::string &name) const {
         return handle_->columnIndex(name) ;
@@ -55,13 +66,9 @@ public:
         return handle_->columnIsNull(idx) ;
     }
 
-    // bytes of this column (blobs)
-    int columnBytes(int idx) const ;
-    // has a column with given name
-    bool hasColumn(const std::string &name) const ;
+    operator bool () const { return is_valid_ ; }
 
-     operator bool () const { return is_valid_ ; }
-
+    // get result column (indexes are zero based)
     template<class T>
     T get(int idx) const {
         T v ;
@@ -69,6 +76,7 @@ public:
         return v ;
     }
 
+    // support for nullable columns
     template<class T>
     std::optional<T> getOptional(int idx) const {
         std::optional<T> v ;
@@ -76,6 +84,7 @@ public:
         return v ;
     }
 
+    // get column by name
     template <class T>
     T get(const std::string &name) const {
         int idx = columnIdx(name) ;
@@ -91,6 +100,7 @@ public:
     // advanve cursor and get the row pointed by
     Row getOne() ;
 
+    // read is same with get but allows template parameter deduction
     template<class T>
     void read(int idx, T &val) const {
         handle_->read(idx, val) ;
@@ -105,10 +115,12 @@ public:
         }
     }
 
+    // go to the first result
     void reset() {
         handle_->reset() ;
     }
 
+    // helper to read all columns into variables
     template <typename ... Args>
     void into(Args &... args) const {
         readi(0, args...) ;
@@ -116,6 +128,8 @@ public:
 
     dictionary_t getAll() const ;
 
+    // iterator that allows to use a loop of the form 
+    // for( auto row: result ) { ... }
     class iterator {
     public:
         iterator(QueryResult &res, bool at_end);
@@ -165,7 +179,7 @@ private:
 
 };
 
-
+// helper class 
 class Column {
 public:
 
@@ -185,8 +199,9 @@ private:
     int idx_ ;
 };
 
-class ColumnAccessor ;
 
+class ColumnAccessor ;
+// This works together with QueryResult to achieve for loops iteration
 class Row {
 public:
     Row(QueryResult &qr): qres_(qr) {}
@@ -205,11 +220,7 @@ public:
     std::string columnName(int idx) const { return qres_.columnName(idx); }
     // index of column with given name
     int columnIdx(const std::string &name) const { return qres_.columnIdx(name) ; }
-    // bytes of this column (blobs)
-    int columnBytes(int idx) const { return qres_.columnBytes(idx); }
-    // has a column with given name
-    bool hasColumn(const std::string &name) const { return qres_.hasColumn(name); }
-
+    
     template <typename ... Args>
     void into(Args &... args) const {
         qres_.into(args...) ;
@@ -253,6 +264,7 @@ inline Row QueryResult::getOne()  {
         return Row(*this) ;
 }
 
+// Helper class used to make the >> operator
 class ColumnAccessor {
 public:
 

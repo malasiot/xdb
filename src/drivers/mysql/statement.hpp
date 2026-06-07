@@ -42,18 +42,23 @@ public:
     QueryResult execQuery() override ;
 
     MYSQL_STMT *handle() const { return handle_ ; }
+
+    uint64_t lastInsertId() const {
+        return static_cast<uint64_t>(mysql_stmt_insert_id(handle_));
+    }
 private:
     void checkBindIdx(int) ;
     
     struct BlobPayload {
         int param_index_ ;
-        Blob stream_;
+        const Blob &stream_;
     };
     std::vector<BlobPayload> pending_blobs_;
 
     MYSQL_STMT *handle_ ;
     std::vector<MYSQL_BIND> binds_;
-    std::vector<std::vector<char>> dynamic_buffers_; 
+    std::vector<std::vector<char>> dynamic_buffers_ ;
+    std::unordered_map<int, unsigned long> length_buffers_ ; 
    
     void check() const;
 };

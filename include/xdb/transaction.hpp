@@ -13,9 +13,11 @@ class Transaction
 {
 public:
 
-    Transaction(Connection &con_); // the constructor starts the constructor
-
-    // you should explicitly call commit or rollback to close it
+    explicit Transaction(Connection &con_); // the constructor starts the constructor
+    Transaction(const Transaction&) = delete;
+    Transaction& operator=(const Transaction&) = delete;
+    Transaction(Transaction&& other) noexcept ;
+    ~Transaction() ;
 
     void commit();
     void rollback();
@@ -23,6 +25,7 @@ public:
 private:
 
     ConnectionHandlePtr con_ ;
+    bool committed_ = false ;
 };
 
 } // namespace xdb

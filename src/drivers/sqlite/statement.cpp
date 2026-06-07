@@ -129,7 +129,7 @@ StatementHandle &SQLiteStatementHandle::bind(int idx, const string &v){
 
 StatementHandle &SQLiteStatementHandle::bind(int idx, const Blob &blob){
     check() ;
-    if ( sqlite3_bind_blob(handle_, idx+1, blob.data(), blob.size(), SQLITE_TRANSIENT ) != SQLITE_OK )
+    if ( sqlite3_bind_blob(handle_, idx+1, blob.data(), blob.size(), SQLITE_STATIC ) != SQLITE_OK )
         throw SQLiteException(sqlite3_db_handle(handle_));
     return *this ;
 }
@@ -147,13 +147,9 @@ int SQLiteStatementHandle::placeholderNameToIndex(const std::string &name) {
     else throw Exception(name + " is not a valid statement placeholder") ;
 }
 
-void SQLiteStatementHandle::exec()
-{
-
+void SQLiteStatementHandle::exec() {
         check() ;
-
         sqlite3_step(handle_) ;
-
 }
 
 QueryResult SQLiteStatementHandle::execQuery()

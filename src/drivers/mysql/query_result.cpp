@@ -329,7 +329,7 @@ void MySQLQueryResultHandle::read(int idx, std::string &val) const {
     val.assign(columns_[idx].buffer_.data(), columns_[idx].actual_length_);
 }
 
-void MySQLQueryResultHandle::read(int idx, Blob &blob) const {
+void MySQLQueryResultHandle::read(int idx, Blob &result_buffer) const {
     check_idx(idx) ;
     const auto &col = columns_[idx] ;
     if ( col.is_null_ ) { return; }
@@ -340,7 +340,6 @@ void MySQLQueryResultHandle::read(int idx, Blob &blob) const {
         throw Exception("Type Mismatch: Column is not a BLOB or binary type.");
     }
 
-    std::vector<uint8_t> result_buffer;
     unsigned long total_blob_size = col.actual_length_;
 
     // Check if the file payload fits entirely within our pre-allocated landing buffer
@@ -372,8 +371,6 @@ void MySQLQueryResultHandle::read(int idx, Blob &blob) const {
         }
 
     }
-
-    blob.setData(result_buffer) ;
     
 }
  

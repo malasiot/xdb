@@ -49,6 +49,11 @@ TEST(DbTests, MySQL) {
       //  con.execute("CREATE TABLE IF NOT EXISTS users (name TEXT, surname TEXT, address TEXT)");
      //   con.execute("INSERT INTO users (name, surname, address) VALUES ('John', 'Smith', 'A'), ('Mary', 'Stewart', 'B'), ('John', 'Snow', null)") ;
 
+        Blob data ; 
+        for ( uint i=0 ; i<100000 ; i++ ) data.push_back((uint8_t)(i%255));
+
+        con.execute("UPDATE users SET bio = ? WHERE id = 1", data) ;
+
         auto q1 = con.query("SELECT surname, address, bio FROM users WHERE name = ?", "John") ;
 
         stringstream res ;

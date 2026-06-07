@@ -24,8 +24,8 @@ public:
 
     // helper for creating a connection and binding parameters
     template<typename ...Args>
-    Statement(Connection& con, const char *sql, Args... args): Statement(con, sql) {
-        bindAll(args...) ;
+    Statement(Connection& con, const char *sql, Args&&... args): Statement(con, sql) {
+        bindAll(std::forward<Args>(args)...) ;
     }
 
     // clear parameter bindings
@@ -37,31 +37,45 @@ public:
     // bind value to placeholder index
 
     template <class T>
-    Statement &bind(int idx, T v) {
-        stmt_->bind(idx, v) ;
+    Statement &bind(int idx, T &v) {
+        stmt_->bind(idx, v);
+        return *this;
+    }
+
+
+    template <class T>
+    Statement &bind(int idx,  T &&v) {
+        stmt_->bind(idx, std::forward<T>(v)) ;
         return *this ;
     }
 
     // bind value by to placeholder by name
 
     template <class T>
-    Statement &bind(const std::string &name, const T &p) {
-        stmt_->bind(stmt_->placeholderNameToIndex(name), p) ;
+    Statement &bind(const std::string &name,  T &&p) {
+        stmt_->bind(stmt_->placeholderNameToIndex(name), std::forward<T>(p)) ;
         return *this ;
     }
+
+    Statement& bind(int idx, const Blob& v) {
+        stmt_->bind(idx, v); 
+        return *this;
+    }
+
+    Statement& bind(int idx, Blob&& v) = delete;    
 
     // bind all values sequentially
 
     template <typename ... Args>
     Statement &bindAll(Args&& ... args) {
-        return bindm((uint)0, args...) ;
+        return bindm((uint)0, std::forward<Args>(args)...) ;
     }
 
     // bind values and execute statement
 
     template<typename ...Args>
     void operator()(Args&&... args) {
-        bindAll(args...) ;
+        bindAll(std::forward<Args>(args)...) ;
         exec() ;
     }
 
@@ -78,11 +92,13 @@ protected:
 
     template <typename T>
     Statement &bindm(uint idx, T&& t) {
-        return bind(idx, t) ;
+        return bind(idx, std::forward<T>(t)) ;
     }
 
-    template <typename First, typename ... Args>
-    Statement &bindm(uint idx, First f, Args&& ... args) {
+    template <typename T, typename ... Args>
+    Statement &bindm(uint idx, T&& f, Args&& ... args) {
+        bind(idx, std::forward<T>(f));
+        return bindm(idx + 1, std::forward<Args>(args)...);
         return bind(idx++, f).bindm(idx, args...) ;
     }
 

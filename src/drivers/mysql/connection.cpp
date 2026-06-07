@@ -13,48 +13,31 @@ void MySQLConnectionHandle::close() {
     mysql_close(handle_) ;
 }
 
-StatementHandlePtr MySQLConnectionHandle::createStatement(const char *sql)
-{
+StatementHandlePtr MySQLConnectionHandle::createStatement(const char *sql) {
     return StatementHandlePtr(new MySQLStatementHandle(sql, handle_)) ;
 }
 
 
-void MySQLConnectionHandle::exec(const char *sql, ...)
-{
-  /*  va_list arguments ;
-    va_start(arguments, sql);
-
-    char *sql_e = sqlite3_vmprintf(sql, arguments) ;
-
-    char *err_msg ;
-    if ( sqlite3_exec(handle_, sql_e, NULL, NULL, &err_msg) != SQLITE_OK ) {
-        string msg(err_msg) ;
-        sqlite3_free(err_msg) ;
-
-        throw Exception(msg) ;
-    }
-
-    sqlite3_free(sql_e) ;
-
-    va_end(arguments);*/
-}
-
-
 void MySQLConnectionHandle::begin() {
-    exec("BEGIN") ;
+    if ( mysql_query(handle_, "START TRANSACTION") != 0 ) {
+        throw xdb::Exception(mysql_error(handle_));
+    }
 }
 
 void MySQLConnectionHandle::commit() {
-    exec("COMMIT") ;
+    if ( mysql_query(handle_, "COMMIT") != 0 ) {
+        throw xdb::Exception(mysql_error(handle_));
+    }
 }
 
 void MySQLConnectionHandle::rollback() {
-    exec("ROLLBACK");
+    if ( mysql_query(handle_, "ROLLBACK") != 0 ) {
+        throw xdb::Exception(mysql_error(handle_));
+    }
 }
 
-uint64_t MySQLConnectionHandle::last_insert_rowid() const
-{
-   // return sqlite3_last_insert_rowid(handle_) ;
+uint64_t MySQLConnectionHandle::last_insert_rowid() const {
+    return static_cast<uint64_t>(mysql_insert_id(handle_)); 
 }
 
 
