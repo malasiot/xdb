@@ -1,5 +1,4 @@
 #include "query_result.hpp"
-#include "exceptions.hpp"
 
 #include <sstream>
 #include <xdb/types.hpp>

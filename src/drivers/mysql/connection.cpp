@@ -1,5 +1,4 @@
 #include "connection.hpp"
-#include "exceptions.hpp"
 #include "statement.hpp"
 
 #include <cassert>

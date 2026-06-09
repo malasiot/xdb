@@ -8,11 +8,11 @@ install(EXPORT ${PROJECT_NAME}-export
   FILE ${PROJECT_NAME}Targets.cmake)
 
 # Create the <package>Config.cmake.in
-configure_file(${CMAKE_SOURCE_DIR}/CMake/Config.cmake.in
+configure_file(${PROJECT_SOURCE_DIR}/CMake/Config.cmake.in
   "${PROJECT_CMAKE_FILES}/${PROJECT_NAME}Config.cmake" @ONLY)
 
 # Create the <package>ConfigVersion.cmake.in
-configure_file(${CMAKE_SOURCE_DIR}/CMake/ConfigVersion.cmake.in
+configure_file(${PROJECT_SOURCE_DIR}/CMake/ConfigVersion.cmake.in
   "${PROJECT_CMAKE_FILES}/${PROJECT_NAME}ConfigVersion.cmake" @ONLY)
 
 # Install <package>Config.cmake and <package>ConfigVersion.cmake files
@@ -26,5 +26,5 @@ configure_file("${CMAKE_SOURCE_DIR}/CMake/Uninstall.cmake.in"
   "${PROJECT_CMAKE_FILES}/Uninstall.cmake"
   IMMEDIATE @ONLY)
 
-add_custom_target(uninstall
-  COMMAND ${CMAKE_COMMAND} -P ${PROJECT_CMAKE_FILES}/Uninstall.cmake)
+#add_custom_target(uninstall
+#  COMMAND ${CMAKE_COMMAND} -P ${PROJECT_CMAKE_FILES}/Uninstall.cmake)

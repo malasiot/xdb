@@ -1,5 +1,4 @@
 #include "statement.hpp"
-#include "exceptions.hpp"
 #include "query_result.hpp"
 
 #include <cstring>

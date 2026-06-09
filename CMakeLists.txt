@@ -13,5 +13,5 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     add_subdirectory(test)
 endif()
 
-include(install)
+#include(install)
 

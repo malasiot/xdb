@@ -38,16 +38,15 @@ endif()
 
 add_library(xdb ${LIBRARY_TYPE} ${SOURCES})
 
-target_include_directories(xdb PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
-  $<INSTALL_INTERFACE:include> PRIVATE ${CMAKE_SOURCE_DIR}/src)
-
-
-include_directories(
-   ${SQLite3_INCLUDE_DIRS}
+target_include_directories(xdb 
+PRIVATE ${SQLite3_INCLUDE_DIRS}
+PUBLIC
+ ${PROJECT_SOURCE_DIR}/include
+PRIVATE .  
    ${PostgreSQL_INCLUDE_DIRS}
-)
+   )
+
+
 
 target_link_libraries(xdb
     PRIVATE SQLite::SQLite3 dl z pthread

@@ -54,7 +54,7 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
 
-set(LIBRARY_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include/xdb/)
+set(LIBRARY_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include/xdb/)
 
 # Version variables
 set(MAJOR_VERSION 1)
@@ -67,4 +67,4 @@ set(LIBRARY_NAME xdb)
 string(TOUPPER ${PROJECT_NAME} PROJECT_NAME_UPPERCASE)
 
 # Create 'version.hpp'
-configure_file(${CMAKE_SOURCE_DIR}/CMake/version.hpp.in "${CMAKE_CURRENT_BINARY_DIR}/version.hpp" @ONLY)
+configure_file(${PROJECT_SOURCE_DIR}/CMake/version.hpp.in "${CMAKE_CURRENT_BINARY_DIR}/version.hpp" @ONLY)
