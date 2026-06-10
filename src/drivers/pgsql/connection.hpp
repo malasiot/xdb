@@ -14,7 +14,7 @@ public:
 
     void close() override ;
 
-    StatementHandlePtr createStatement(const std::string &sql) ;
+    StatementHandlePtr createStatement(const char *sql) override;
 
     void begin() override ;
     void commit() override ;

@@ -119,7 +119,7 @@ void PGSQLQueryResultHandle::read(int idx, Blob &blob) const {
     char *blob_bytes = PQgetvalue(result_.get(), row_, idx) ;
     size_t blob_size = PQgetlength(result_.get(), row_, idx);
 
-    blob = Blob((const char *)blob_bytes, blob_size) ;
+    blob.assign(blob_bytes, blob_bytes + blob_size) ;
 }
 
 

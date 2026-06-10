@@ -37,7 +37,7 @@ if ( TARGET PkgConfig::MARIADB )
 endif()
 
 add_library(xdb ${LIBRARY_TYPE} ${SOURCES})
-
+message(${PostgreSQL_INCLUDE_DIRS})
 target_include_directories(xdb 
 PRIVATE ${SQLite3_INCLUDE_DIRS}
 PUBLIC
@@ -53,7 +53,7 @@ target_link_libraries(xdb
 )
 
 if ( PostgreSQL_FOUND )
-    target_link_libraries(xdb PRIVATE PostgreSQL::PostgreSQL)
+    target_link_libraries(xdb PRIVATE ${PostgreSQL_LIBRARIES})
     target_compile_definitions(xdb PRIVATE HAS_PGSQL_DRIVER)
 endif (  PostgreSQL_FOUND )  
 

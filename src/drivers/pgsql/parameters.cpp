@@ -33,7 +33,7 @@ int PreparedStatementParameters::marshall(std::vector<const char *> &values,
             lengths[param] = values_[e.array_idx_].size() ;
             break ;
         case Type::Blob:
-            values[param] = blobs_[e.array_idx_].data() ;
+            values[param] = reinterpret_cast<const char *>(blobs_[e.array_idx_].data()) ;
             lengths[param] = blobs_[e.array_idx_].size() ;
             binaries[param] = 1 ;
             break ;

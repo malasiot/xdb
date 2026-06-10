@@ -3,6 +3,7 @@
 
 #include <regex>
 #include <map>
+#include <sstream>
 
 namespace xdb {
 

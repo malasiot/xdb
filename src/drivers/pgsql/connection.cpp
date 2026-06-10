@@ -10,7 +10,7 @@ void PGSQLConnectionHandle::close() {
     PQfinish(handle_) ;
 }
 
-StatementHandlePtr PGSQLConnectionHandle::createStatement(const std::string &sql)
+StatementHandlePtr PGSQLConnectionHandle::createStatement(const char *sql)
 {
     return StatementHandlePtr(new PGSQLStatementHandle(sql, handle_)) ;
 
