@@ -11,7 +11,9 @@ namespace xdb {
 
 class PGSQLStatementHandle final: public StatementHandle, public std::enable_shared_from_this<PGSQLStatementHandle> {
 public:
-    PGSQLStatementHandle(const std::string &sql, PGconn *handle): sql_(sql), handle_(handle) {}
+    PGSQLStatementHandle(const std::string &sql, PGconn *handle): sql_(sql), handle_(handle) {
+        prepare();
+    }
 
     ~PGSQLStatementHandle() {
         finalize() ;
@@ -50,12 +52,18 @@ private:
     PGconn *handle_ ;
 
     void check() const;
+    void checkIdx(int) const;
     void prepare() ;
     PGresult *doExec() ;
     bool checkResult(PGresult *) const ;
 
     PreparedStatementParameters params_ ;
     std::string sql_, name_ ;
+    
+    std::vector<std::string> strings_;
+    std::vector<const char *> values_;
+    std::vector<int> lengths_, formats_ ;
+    
 };
 
 

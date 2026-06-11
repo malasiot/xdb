@@ -24,7 +24,7 @@ int PreparedStatementParameters::marshall(std::vector<const char *> &values,
     binaries.resize(array_size, 0);
 
     for( const auto &p: entries_ ) {
-        int param = p.first - 1 ;
+        int param = p.first  ;
         const Entry &e = p.second ;
 
         switch(e.type_) {
@@ -33,7 +33,7 @@ int PreparedStatementParameters::marshall(std::vector<const char *> &values,
             lengths[param] = values_[e.array_idx_].size() ;
             break ;
         case Type::Blob:
-            values[param] = blobs_[e.array_idx_].data() ;
+            values[param] = reinterpret_cast<const char *>(blobs_[e.array_idx_].data()) ;
             lengths[param] = blobs_[e.array_idx_].size() ;
             binaries[param] = 1 ;
             break ;
