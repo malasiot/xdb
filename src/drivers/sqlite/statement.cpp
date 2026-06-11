@@ -152,6 +152,24 @@ void SQLiteStatementHandle::exec() {
         sqlite3_step(handle_) ;
 }
 
+int64_t SQLiteStatementHandle::execInsert() {
+    check() ;
+    int rc = sqlite3_step(handle_) ;
+         
+    long long generated_id = -1;
+
+    if ( rc == SQLITE_ROW ) { // user provided RETURNING clause
+        generated_id = sqlite3_column_int64(handle_, 0);
+        sqlite3_step(handle_); 
+    } else if (rc == SQLITE_DONE) {
+        // Fall back to the native connection counter for safety
+        generated_id = sqlite3_last_insert_rowid(sqlite3_db_handle(handle_));
+    } else {
+        std::cerr << "SQLite Execution Error: " << sqlite3_errmsg(sqlite3_db_handle(handle_)) << "\n";
+    }
+    return generated_id ;
+}
+
 QueryResult SQLiteStatementHandle::execQuery()
 {
 

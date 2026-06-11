@@ -41,6 +41,7 @@ public:
 
     void exec() override ;
     QueryResult execQuery() override ;
+    int64_t execInsert() override ;
 
     sqlite3_stmt *handle() const { return handle_ ; }
 private:

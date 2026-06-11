@@ -4,11 +4,7 @@ if(APPLE)
         "/opt/homebrew/opt/sqlite"     # Apple Silicon (M1/M2/M3/M4)
         "/usr/local/opt/sqlite"         # Intel Macs
     )
-<<<<<<< HEAD
     SET(PostgreSQL_ADDITIONAL_VERSIONS 17 18)
-=======
-    set(PostegreSQL_ROOT /opt/homebrew/lib/)
->>>>>>> 9ee52cda7ce44a325ec1190d3d2e98d62c9d6c65
 endif()
 
 find_package(SQLite3 REQUIRED)

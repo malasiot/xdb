@@ -256,6 +256,21 @@ QueryResult MySQLStatementHandle::execQuery()
         }
     }
 
+     const size_t chunk_sz = 16384L ;
+
+    for (const auto& blob : pending_blobs_) {
+        unsigned long offset = 0;
+        while ( offset < blob.stream_.size() ) {
+            unsigned long send_bytes = std::min(chunk_sz, static_cast<size_t>(blob.stream_.size() - offset));
+            if ( mysql_stmt_send_long_data(handle_, blob.param_index_, (const char *)blob.stream_.data() + offset, send_bytes) != 0 ) {
+                throw std::runtime_error("BLOB chunk stream failed.");
+            }
+            offset += send_bytes;
+        }
+
+        offset = 0;
+    }
+
     if ( mysql_stmt_execute(handle_) != 0 ) {
         throw Exception(mysql_stmt_error(handle_));
     }
@@ -267,6 +282,43 @@ QueryResult MySQLStatementHandle::execQuery()
     }
 
     return res ;
+}
+
+int64_t MySQLStatementHandle::execInsert()
+{
+    exec() ;
+
+    MYSQL_STMT *handle = mysql_stmt_init(con_);
+    if ( !handle ) {
+        throw Exception("Failed to initialize statement structure");
+    }
+
+   if (mysql_query(con_, "SELECT LAST_INSERT_ID();") != 0) {
+        std::cerr << "MySQL Query Error: " << mysql_error(con_) << "\n";
+        return -1;
+    }
+
+    // 2. Store the result set in local application memory
+    MYSQL_RES* res = mysql_store_result(con_);
+    if (!res) {
+        std::cerr << "Failed to store result set: " << mysql_error(con_) << "\n";
+        return -1;
+    }
+
+    long long insert_id = -1;
+
+    // 3. Fetch the single row (row 0)
+    MYSQL_ROW row = mysql_fetch_row(res);
+    if (row && row[0]) {
+        // Row columns are always returned as strings, convert to long long
+        insert_id = std::stoll(row[0]);
+    }
+
+    // 4. CRITICAL: Always free the result memory to prevent memory leaks
+    mysql_free_result(res);
+    
+    return insert_id;
+
 }
 
 } // namespace xdb

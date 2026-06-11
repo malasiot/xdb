@@ -44,6 +44,7 @@ public:
     virtual int placeholderNameToIndex(const std::string &name) = 0 ;
 
     virtual void exec() = 0 ;
+    virtual int64_t execInsert() = 0 ;
     virtual QueryResult execQuery() = 0 ;
 };
 

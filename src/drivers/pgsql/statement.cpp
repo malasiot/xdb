@@ -215,6 +215,26 @@ void PGSQLStatementHandle::exec()
     doExec() ;
 }
 
+int64_t PGSQLStatementHandle::execInsert()
+{
+    PGresult *res = doExec() ;
+
+    long long generated_id = -1;
+
+    if (PQresultStatus(res) == PGRES_TUPLES_OK) {
+        if (PQntuples(res) > 0 && PQnfields(res) > 0) {
+            if (!PQgetisnull(res, 0, 0)) {
+                const char* raw_id = PQgetvalue(res, 0, 0);
+                generated_id = std::stoll(raw_id);
+            }
+        }
+    } else {
+        std::cerr << "Database execution failed or did not return tuples.\n";
+    }
+
+    return generated_id;
+}
+
 PGresult *PGSQLStatementHandle::doExec()
 {
     PGresult *res ;

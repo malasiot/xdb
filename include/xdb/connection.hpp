@@ -49,6 +49,13 @@ public:
         Statement(*this, sql)(args...) ;
     }
 
+    template<typename ...Args>
+    int64_t execInsert(const char *sql, Args... args) {
+        Statement stmt(*this, sql) ;
+        stmt.bindAll(args...) ;
+        return stmt.execInsert() ;
+    }
+
     Transaction transaction() ;
 
     void check() ;

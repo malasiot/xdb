@@ -40,6 +40,7 @@ public:
 
     void exec() override ;
     QueryResult execQuery() override ;
+    int64_t execInsert() override ;
 
     MYSQL_STMT *handle() const { return handle_ ; }
 
@@ -59,6 +60,7 @@ private:
     std::vector<MYSQL_BIND> binds_;
     std::vector<std::vector<char>> dynamic_buffers_ ;
     std::unordered_map<int, unsigned long> length_buffers_ ; 
+    MYSQL *con_ ;
    
     void check() const;
 };

@@ -45,6 +45,7 @@ public:
 
     void exec() override ;
     QueryResult execQuery() override ;
+    int64_t execInsert() override ;
 
     PGconn *handle() const { return handle_ ; }
 private:

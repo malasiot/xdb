@@ -83,6 +83,10 @@ public:
         stmt_->exec() ;
     }
 
+    int64_t execInsert() {
+        return stmt_->execInsert() ;
+    }
+
 protected:
 
 
