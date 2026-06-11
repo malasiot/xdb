@@ -24,7 +24,7 @@ int PreparedStatementParameters::marshall(std::vector<const char *> &values,
     binaries.resize(array_size, 0);
 
     for( const auto &p: entries_ ) {
-        int param = p.first - 1 ;
+        int param = p.first  ;
         const Entry &e = p.second ;
 
         switch(e.type_) {

@@ -1,7 +1,7 @@
 #include "statement.hpp"
 #include "exceptions.hpp"
 #include "query_result.hpp"
-
+#include "string_conv.hpp"
 #include <cstring>
 
 #include <random>
@@ -15,6 +15,11 @@ namespace xdb {
 void PGSQLStatementHandle::check() const {
     if ( !handle_ )
         throw Exception("Statement has not been compiled.");
+}
+
+void PGSQLStatementHandle::checkIdx(int idx) const {
+    if ( idx >= values_.size() )
+        throw Exception("Bound parameter index out of range.");
 }
 
 // https://stackoverflow.com/questions/440133/how-do-i-create-a-random-alpha-numeric-string-in-c
@@ -46,15 +51,35 @@ void PGSQLStatementHandle::prepare()
         PGresult *r = PQprepare(handle_, name_.c_str(), sql_.c_str(), 0, nullptr) ;
 
         if ( !checkResult(r) ) {
+           
             PQclear(r) ;
             throw PGSQLException(handle_) ;
+        } 
+
+        PGresult* describe_res = PQdescribePrepared(handle_, name_.c_str());
+        int nparams = -1;
+
+        if ( PQresultStatus(describe_res) == PGRES_COMMAND_OK) {
+            nparams = PQnparams(describe_res);
+        } else {
+                throw PGSQLException(handle_);
         }
+
+        PQclear(describe_res);
+         
+        values_.resize(nparams, nullptr);
+        lengths_.resize(nparams, 0);
+        strings_.resize(nparams) ;
+        formats_.resize(nparams, 0) ;
     }
 
 }
 
 void PGSQLStatementHandle::clear() {
-    params_.clear() ;
+    std::fill(lengths_.begin(), lengths_.end(), 0);
+    std::fill(values_.begin(), values_.end(), nullptr);
+    std::fill(strings_.begin(), strings_.end(), std::string());
+    std::fill(formats_.begin(), formats_.end(), 0);
 }
 
 void PGSQLStatementHandle::finalize()
@@ -64,104 +89,124 @@ void PGSQLStatementHandle::finalize()
 
 
 StatementHandle &PGSQLStatementHandle::bind(int idx, const NullType &v) {
-    check();
-    params_.add(idx, v) ;
+    checkIdx(idx);
     return *this ;
 }
 
 
+template<class T>
+static void bind_param(std::vector<std::string> &strings, std::vector<const char *> &values,
+    std::vector<int> &lengths, int idx, const T &v) {
+    if ( idx >= values.size() )
+        throw Exception("Bound parameter index out of range.");
+    string s = pq_to_string(v) ;
+    strings[idx] = std::move(s) ;
+    lengths[idx] = s.size() ;
+    values[idx] = strings[idx].data();
+} 
+
 StatementHandle &PGSQLStatementHandle::bind(int idx, unsigned char v) {
     check();
-    params_.add(idx, v) ;
+    bind_param(strings_, values_, lengths_, idx, v);
     return *this ;
 }
 
 StatementHandle &PGSQLStatementHandle::bind(int idx, char v) {
     check();
-    params_.add(idx, v) ;
+    bind_param(strings_, values_, lengths_, idx, v);
     return *this ;
 }
 
+
 StatementHandle &PGSQLStatementHandle::bind(int idx, int v) {
     check();
-    params_.add(idx, v) ;
+    bind_param(strings_, values_, lengths_, idx, v);
     return *this ;
 }
 
 StatementHandle &PGSQLStatementHandle::bind(int idx, unsigned int v) {
     check();
-    params_.add(idx, v) ;
+    bind_param(strings_, values_, lengths_, idx, v);
     return *this ;
 }
 
 StatementHandle &PGSQLStatementHandle::bind(int idx, unsigned short int v) {
     check();
-    params_.add(idx, v) ;
+    bind_param(strings_, values_, lengths_, idx, v);
     return *this ;
 }
 
 StatementHandle &PGSQLStatementHandle::bind(int idx, short int v) {
     check();
-    params_.add(idx, v) ;
+    bind_param(strings_, values_, lengths_, idx, v);
     return *this ;
 }
 
 StatementHandle &PGSQLStatementHandle::bind(int idx, long int v) {
     check();
-    params_.add(idx, v) ;
+    bind_param(strings_, values_, lengths_, idx, v);
     return *this ;
 }
 
 StatementHandle &PGSQLStatementHandle::bind(int idx, unsigned long int v) {
     check();
-    params_.add(idx, v) ;
+    bind_param(strings_, values_, lengths_, idx, v);
     return *this ;
 }
 
 StatementHandle &PGSQLStatementHandle::bind(int idx, long long int v){
     check();
-    params_.add(idx, v) ;
+    bind_param(strings_, values_, lengths_, idx, v);
     return *this ;
 }
 
 StatementHandle &PGSQLStatementHandle::bind(int idx, unsigned long long int v){
     check();
-    params_.add(idx, v) ;
+    bind_param(strings_, values_, lengths_, idx, v);
     return *this ;
 }
 
 StatementHandle &PGSQLStatementHandle::bind(int idx, double v){
     check();
-    params_.add(idx, v) ;
+    bind_param(strings_, values_, lengths_, idx, v);
     return *this ;
 }
 
 StatementHandle &PGSQLStatementHandle::bind(int idx, float v){
     check();
-    params_.add(idx, v) ;
+    bind_param(strings_, values_, lengths_, idx, v);
     return *this ;
 }
 
 StatementHandle &PGSQLStatementHandle::bind(int idx, const string &v){
-    check();
-    params_.add(idx, v) ;
+    if ( idx >= values_.size() )
+        throw Exception("Bound parameter index out of range.");
+    strings_[idx] = v ;
+    lengths_[idx] = v.size() ;
+    values_[idx] = strings_[idx].data();
     return *this ;
 }
 
 StatementHandle &PGSQLStatementHandle::bind(int idx, const Blob &blob){
-    check();
-    params_.add(idx, blob) ;
+    if ( idx >= values_.size() )
+        throw Exception("Bound parameter index out of range.");
+    lengths_[idx] = blob.size() ;
+    values_[idx] = reinterpret_cast<const char *>(blob.data());
+    formats_[idx] = 1 ;
     return *this ;
 }
 
 StatementHandle &PGSQLStatementHandle::bind(int idx, const char *v){
-    check();
-    params_.add(idx, v) ;
+    if ( idx >= values_.size() )
+        throw Exception("Bound parameter index out of range.");
+    strings_[idx] = v ;
+    lengths_[idx] = strlen(v) ;
+    values_[idx] = strings_[idx].data();
     return *this ;
 }
 
 int PGSQLStatementHandle::placeholderNameToIndex(const std::string &name) {
-    return stoi(name.c_str()+1) ;
+    return stoi(name.c_str()) ;
 
 }
 
@@ -172,21 +217,15 @@ void PGSQLStatementHandle::exec()
 
 PGresult *PGSQLStatementHandle::doExec()
 {
-    prepare() ;
-
-    vector<const char *> values ;
-    vector<int> lengths, binaries ;
-    params_.marshall(values, lengths, binaries) ;
-
     PGresult *res ;
 
     if ( !name_.empty() ) {
-        res = PQexecPrepared(handle_, name_.c_str(), int(params_.size()),
-                             &values[0],  &lengths[0], &binaries[0], 0);
+        res = PQexecPrepared(handle_, name_.c_str(), int(values_.size()),
+                             &values_[0],  &lengths_[0], &formats_[0], 0);
     }
     else {
-        res = PQexecParams(handle_, sql_.c_str(), int(values.size()), nullptr,
-                           &values[0],  &lengths[0], &binaries[0], 0);
+        res = PQexecParams(handle_, sql_.c_str(), int(values_.size()), nullptr,
+                           &values_[0],  &lengths_[0], &formats_[0], 0);
     }
 
     if ( !checkResult(res) ) {

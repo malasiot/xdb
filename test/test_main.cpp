@@ -97,7 +97,7 @@ TEST(DbTests, PostgreSQL) {
 
         con.execute("UPDATE users SET bio = $1 WHERE id = 1", data) ;
 
-        auto q1 = con.query("SELECT surname, address, bio FROM users WHERE name = $1", "John") ;
+        auto q1 = con.query("SELECT surname, address, bio FROM users WHERE name = $1 ORDER by id", "John") ;
 
         stringstream res ;
         for ( auto row: q1 ) {

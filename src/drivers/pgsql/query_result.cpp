@@ -30,6 +30,7 @@ bool PGSQLQueryResultHandle::next() {
         row_ = -2 ;
         return false ;
     }
+    return true ;
 }
 
 int PGSQLQueryResultHandle::columns() const  {
@@ -116,10 +117,15 @@ void PGSQLQueryResultHandle::read(int idx, std::string &val) const {
 
 void PGSQLQueryResultHandle::read(int idx, Blob &blob) const {
     check_has_row() ;
-    char *blob_bytes = PQgetvalue(result_.get(), row_, idx) ;
-    size_t blob_size = PQgetlength(result_.get(), row_, idx);
+    const unsigned char* escaped_str = reinterpret_cast<const unsigned char*>(PQgetvalue(result_.get(), row_, idx));
+    size_t unescaped_length = 0;
+    unsigned char* raw_bytes = PQunescapeBytea(escaped_str, &unescaped_length);
 
-    blob.assign(blob_bytes, blob_bytes + blob_size) ;
+    if (raw_bytes) {
+        blob.assign(raw_bytes, raw_bytes + unescaped_length);
+        PQfreemem(raw_bytes);
+    }
+   
 }
 
 
