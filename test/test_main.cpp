@@ -88,9 +88,9 @@ TEST(DbTests, MySQL) {
 TEST(DbTests, PostgreSQL) {
     try {
         Connection con ;
-        con.open("pgsql:dbname=hp;host=localhost;port=5432;user=malasiot;password=sotiris99") ;
-   //     con.execute("CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY,  name TEXT, surname TEXT, address TEXT, bio bytea)");
-    //    con.execute("INSERT INTO users (name, surname, address) VALUES ('John', 'Smith', 'A'), ('Mary', 'Stewart', 'B'), ('John', 'Snow', null)") ;
+        con.open("pgsql:dbname=hp;host=localhost;port=5432;user=postgres") ;
+        con.execute("CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY,  name TEXT, surname TEXT, address TEXT, tel INTEGER, bio bytea)");
+        con.execute("INSERT INTO users (name, surname, address, tel) VALUES ('John', 'Smith', 'A', 123), ('Mary', 'Stewart', 'B', 345), ('John', 'Snow', null, null)") ;
 
         Blob data ; 
         for ( uint i=0 ; i<100000 ; i++ ) data.push_back((uint8_t)(i%255));

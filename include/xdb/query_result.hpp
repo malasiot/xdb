@@ -7,6 +7,7 @@
 #include <xdb/query_result_handle.hpp>
 
 #include <iostream>
+#include <optional>
 
 namespace xdb {
 
