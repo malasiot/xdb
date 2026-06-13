@@ -42,6 +42,15 @@ public:
         return *this;
     }
 
+     template <class T>
+    Statement &bind(int idx, const std::optional<T> &v) {
+        if ( v )
+            stmt_->bind(idx, v.value());
+        else
+            stmt_->bind(idx, nullptr);
+        return *this;
+    }
+
 
     template <class T>
     Statement &bind(int idx,  T &&v) {
